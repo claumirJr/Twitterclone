@@ -43,28 +43,29 @@ if ($resultado_id = mysqli_query($link, "select * from usuarios where email = '$
 
 // se o usuario e senha existir, retorna para a pagina iscrevase
 if($usuario_existe || $email_existe){        //se o usuario OU o email existir
-    
+
     $retorno_get = '';
-    
+
     if($usuario_existe){
         $retorno_get.="erro_usuario=1&";
     }
-    
+
     if($email_existe){
         $retorno_get.="erro_email=1&";
     }
-    
+
     header('location: inscrevase.php?'.$retorno_get); // retorna via get o existente para a pagina inscrevase.php
-    
+
     die(); // para o codigo para não cadastrar o usuario e e-mail existente
 }
 
 
 //inserir um novo usuario ao banco de dados
 if (mysqli_query($link, "insert into usuarios(usuario, email, senha) values ('$usuario', '$email', '$senha')")) {
-    echo 'Usuario registrado com sucesso!';
+    // Iniciei uma sessão e armazenei a mensagem nela. Redirecionei para o index para o usuario fazer login
+    session_start();
+    $_SESSION['mensagem'] = 'Usuario registrado com sucesso!';
+    header('Location:index.php');
 } else {
     echo 'Erro ao registrar o usuário!';
 }
-
-    
